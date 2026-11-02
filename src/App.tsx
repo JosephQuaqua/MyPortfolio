@@ -1,3 +1,5 @@
+import { ExperienceDetailPage } from "./pages/ExperienceDetailPage";
+import { ContactPage } from "./pages/ContactPage";
 import { Route, Routes } from "react-router-dom";
 import { SiteLayout } from "./components/layout/SiteLayout";
 import { AdminLayout } from "./components/admin/AdminLayout";
@@ -36,6 +38,9 @@ export default function App() {
   return (
     <Routes>
       <Route element={<SiteLayout />}>
+      <Route path="experience/:id" element={<ExperienceDetailPage />} />
+
+      <Route path="contact" element={<ContactPage />} />
         <Route index element={<HomePage />} />
         <Route path="projects/:slug" element={<ProjectDetailPage />} />
         <Route path="hire" element={<HirePage />} />

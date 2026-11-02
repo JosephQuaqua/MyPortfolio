@@ -76,6 +76,7 @@ export interface ExperienceRow {
   live_url: string | null;
   github_url: string | null;
   display_order: number;
+  is_published: boolean;
 }
 
 export interface ProjectTechnologyRow {

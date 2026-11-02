@@ -1,69 +1,163 @@
-import { useSiteContent } from "../../context/SiteContentContext";
-import { SectionShell } from "../ui/SectionShell";
-import { SafeLink } from "../ui/SafeLink";
+
 import { Link } from "react-router-dom";
+import { useSiteContent } from "../../context/SiteContentContext";
+import { SafeLink } from "../ui/SafeLink";
 import { ContactForm } from "../forms/ContactForm";
 import { toSafeHref } from "../../lib/links";
 
-export function ContactSection() {
+export function ContactPage() {
   const { socialLinks, profile } = useSiteContent();
-  const email = socialLinks.data?.find((link) => link.platform === "email");
-  const phone = socialLinks.data?.find((link) => link.platform === "phone");
-  const otherLinks = socialLinks.data?.filter((link) => link.platform !== "email" && link.platform !== "phone") ?? [];
-  const hireHref = toSafeHref(profile.data?.primary_cta_url);
+
+  const links = socialLinks.data ?? [];
+
+  const email = links.find((link) => link.platform === "email");
+  const phone = links.find((link) => link.platform === "phone");
+
+  const otherLinks = links.filter(
+    (link) =>
+      link.platform !== "email" &&
+      link.platform !== "phone"
+  );
+
+  const hireHref = toSafeHref(
+    profile.data?.primary_cta_url
+  );
 
   return (
-    <SectionShell id="contact" number="07" title="Contact">
-      <div className="contact">
-        <div className="contact__details">
-          <p className="entry__text">
-            For a role, a freelance project or a technical conversation, send a message or use the Hire Me form.
-          </p>
-          {profile.data?.location && <p className="entry__muted">{profile.data.location}</p>}
-          <dl className="contact__list">
-            {email?.url && (
-              <>
-                <dt className="mono-label">Email</dt>
-                <dd>
-                  <SafeLink url={email.url} className="text-link">
-                    {email.url.replace(/^mailto:/, "")}
-                  </SafeLink>
-                </dd>
-              </>
-            )}
-            {phone?.url && (
-              <>
-                <dt className="mono-label">Phone</dt>
-                <dd>
-                  <SafeLink url={phone.url} className="text-link">
-                    {phone.url.replace(/^tel:/, "")}
-                  </SafeLink>
-                </dd>
-              </>
-            )}
-          </dl>
-          {otherLinks.length > 0 && (
-            <ul className="contact__socials" aria-label="Social links">
-              {otherLinks.map((link) => (
-                <li key={link.id}>
-                  <SafeLink url={link.url} className="text-link">
-                    {link.label}
-                  </SafeLink>
-                </li>
-              ))}
-            </ul>
-          )}
-          {hireHref && (
-            <SafeLink url={hireHref} className="btn btn--primary">
-              {profile.data?.primary_cta_label ?? "Hire Me"}
-            </SafeLink>
-          )}
-          <Link to="/book" className="btn btn--ghost">
-            Book a Consultation
-          </Link>
-        </div>
-        <ContactForm />
+    <div className="contact-page">
+      <Link to="/" className="contact-page__back">
+        <span aria-hidden="true">←</span>
+        <span>Back to portfolio</span>
+      </Link>
+
+      <div className="contact-page__intro">
+        <p className="contact-page__eyebrow">
+          Get In Touch
+        </p>
+
+        <h1 className="contact-page__title">
+          Let’s work together.
+        </h1>
+
+        <p className="contact-page__lead">
+          Whether you have a project in mind, a role you would
+          like to discuss, or simply want to start a technical
+          conversation, I’d be happy to hear from you.
+        </p>
       </div>
-    </SectionShell>
+
+      <div className="contact-page__layout">
+        <aside className="contact-page__sidebar">
+          <div className="contact-page__block">
+            <p className="contact-page__label">
+              Contact
+            </p>
+
+            <dl className="contact-page__details">
+              {email?.url && (
+                <div className="contact-page__detail">
+                  <dt>Email</dt>
+                  <dd>
+                    <SafeLink
+                      url={email.url}
+                      className="contact-page__link"
+                    >
+                      {email.url.replace(/^mailto:/, "")}
+                    </SafeLink>
+                  </dd>
+                </div>
+              )}
+
+              {phone?.url && (
+                <div className="contact-page__detail">
+                  <dt>Phone</dt>
+                  <dd>
+                    <SafeLink
+                      url={phone.url}
+                      className="contact-page__link"
+                    >
+                      {phone.url.replace(/^tel:/, "")}
+                    </SafeLink>
+                  </dd>
+                </div>
+              )}
+
+              {profile.data?.location && (
+                <div className="contact-page__detail">
+                  <dt>Based in</dt>
+                  <dd>{profile.data.location}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          {otherLinks.length > 0 && (
+            <div className="contact-page__block">
+              <p className="contact-page__label">
+                Elsewhere
+              </p>
+
+              <ul
+                className="contact-page__socials"
+                aria-label="Social links"
+              >
+                {otherLinks.map((link) => (
+                  <li key={link.id}>
+                    <SafeLink
+                      url={link.url}
+                      className="contact-page__link"
+                    >
+                      {link.label}
+                    </SafeLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="contact-page__actions">
+            {hireHref && (
+              <SafeLink
+                url={hireHref}
+                className="contact-page__action contact-page__action--primary"
+              >
+                <span>
+                  {profile.data?.primary_cta_label ??
+                    "Hire Me"}
+                </span>
+
+                <span aria-hidden="true">↗</span>
+              </SafeLink>
+            )}
+
+            <Link
+              to="/book"
+              className="contact-page__action"
+            >
+              <span>Book a Consultation</span>
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </aside>
+
+        <section
+          className="contact-page__form"
+          aria-label="Contact form"
+        >
+          <div className="contact-page__form-header">
+            <p className="contact-page__label">
+              Send a Message
+            </p>
+
+            <p>
+              Tell me a little about what you’re working on
+              and how I can help.
+            </p>
+          </div>
+
+          <ContactForm />
+        </section>
+      </div>
+    </div>
   );
 }
